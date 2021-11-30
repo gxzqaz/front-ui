@@ -28,7 +28,6 @@ const LoginMessage: React.FC<{
 
 const Login: React.FC = () => {
   const [userLoginState, setUserLoginState] = useState<API.LoginResult>({});
-  const [type, setType] = useState<string>('account');
   const { initialState, setInitialState } = useModel('@@initialState');
 
   const fetchUserInfo = async () => {
@@ -42,7 +41,7 @@ const Login: React.FC = () => {
   const handleSubmit = async (values: API.LoginParams) => {
     try {
       // 登录
-      const msg = await login({ ...values, type });
+      const msg = await login({ ...values });
 
       if (msg.status === 'ok') {
         const defaultLoginSuccessMessage = '登录成功！';

@@ -2,6 +2,12 @@
 /* eslint-disable */
 
 declare namespace API {
+  type Result<T> = {
+    c: string;
+    m: string;
+    d?: T;
+  }
+
   type CurrentUser = {
     name?: string;
     avatar?: string;
@@ -65,7 +71,6 @@ declare namespace API {
     username?: string;
     password?: string;
     autoLogin?: boolean;
-    type?: string;
   };
 
   type ErrorResponse = {
