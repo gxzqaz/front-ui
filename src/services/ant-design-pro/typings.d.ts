@@ -1,13 +1,10 @@
-// @ts-ignore
-/* eslint-disable */
+type Result<T> = {
+  c: string;
+  m: string;
+  d?: T;
+};
 
 declare namespace API {
-  type Result<T> = {
-    c: string;
-    m: string;
-    d?: T;
-  }
-
   type CurrentUser = {
     name?: string;
     avatar?: string;
@@ -30,9 +27,8 @@ declare namespace API {
   };
 
   type LoginResult = {
-    status?: string;
-    type?: string;
-    currentAuthority?: string;
+    username?: string;
+    authorities?: string[];
   };
 
   type PageParams = {

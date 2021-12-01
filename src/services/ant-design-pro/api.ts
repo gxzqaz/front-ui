@@ -1,7 +1,6 @@
 // @ts-ignore
 /* eslint-disable */
 import { request } from 'umi';
-import LoginResult = API.LoginResult;
 
 /** 获取当前的用户 GET /api/currentUser */
 export async function currentUser(options?: { [key: string]: any }) {
@@ -26,7 +25,7 @@ export async function outLogin(options?: { [key: string]: any }) {
 
 /** 登录接口 POST /api/login/account */
 export async function login(body: API.LoginParams) {
-  return request<API.Result<LoginResult>>('/api/login/account', {
+  return request<Result<API.LoginResult>>('/api/login', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

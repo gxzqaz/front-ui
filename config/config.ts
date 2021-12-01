@@ -39,18 +39,6 @@ export default defineConfig({
           redirect: '/user/login',
         },
         {
-          name: 'register-result',
-          icon: 'smile',
-          path: '/user/register-result',
-          component: './user/register-result',
-        },
-        {
-          name: 'register',
-          icon: 'smile',
-          path: '/user/register',
-          component: './user/register',
-        },
-        {
           component: '404',
         },
       ],
@@ -317,8 +305,10 @@ export default defineConfig({
   ignoreMomentLocale: true,
   proxy: proxy[REACT_APP_ENV || 'dev'],
   manifest: {
-    basePath: '/',
+    basePath: '/static',
   },
+  // base: "/static", //最终输出路径
+  publicPath: '/static/',
   // Fast Refresh 热更新
   fastRefresh: {},
   openAPI: [

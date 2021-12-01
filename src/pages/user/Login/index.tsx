@@ -41,9 +41,9 @@ const Login: React.FC = () => {
   const handleSubmit = async (values: API.LoginParams) => {
     try {
       // 登录
-      const msg = await login({ ...values });
+      const result = await login({ ...values });
 
-      if (msg.status === 'ok') {
+      if (result.c === '0') {
         const defaultLoginSuccessMessage = '登录成功！';
         message.success(defaultLoginSuccessMessage);
         await fetchUserInfo();
@@ -58,16 +58,15 @@ const Login: React.FC = () => {
         return;
       }
 
-      console.log(msg); // 如果失败去设置用户错误信息
-
-      setUserLoginState(msg);
+      console.log(result); // 如果失败去设置用户错误信息
+      setUserLoginState(result.d || {});
     } catch (error) {
       const defaultLoginFailureMessage = '登录失败，请重试！';
       message.error(defaultLoginFailureMessage);
     }
   };
 
-  const { status, type: loginType } = userLoginState;
+  const { username } = userLoginState;
   return (
     <div className={styles.container}>
       <div className={styles.content}>
@@ -88,45 +87,42 @@ const Login: React.FC = () => {
             await handleSubmit(values as API.LoginParams);
           }}
         >
-          <Tabs activeKey={type} onChange={setType}>
+          <Tabs>
             <Tabs.TabPane key="account" tab={'账户密码登录'} />
           </Tabs>
 
-          {status === 'error' && loginType === 'account' && (
-            <LoginMessage content={'错误的用户名和密码(admin/ant.design)'} />
-          )}
-          {type === 'account' && (
-            <>
-              <ProFormText
-                name="username"
-                fieldProps={{
-                  size: 'large',
-                  prefix: <UserOutlined className={styles.prefixIcon} />,
-                }}
-                placeholder={'用户名: admin or user'}
-                rules={[
-                  {
-                    required: true,
-                    message: '用户名是必填项！',
-                  },
-                ]}
-              />
-              <ProFormText.Password
-                name="password"
-                fieldProps={{
-                  size: 'large',
-                  prefix: <LockOutlined className={styles.prefixIcon} />,
-                }}
-                placeholder={'密码: ant.design'}
-                rules={[
-                  {
-                    required: true,
-                    message: '密码是必填项！',
-                  },
-                ]}
-              />
-            </>
-          )}
+          {username === null && <LoginMessage content={'错误的用户名和密码(admin/ant.design)'} />}
+
+          <>
+            <ProFormText
+              name="username"
+              fieldProps={{
+                size: 'large',
+                prefix: <UserOutlined className={styles.prefixIcon} />,
+              }}
+              placeholder={'用户名: admin or user'}
+              rules={[
+                {
+                  required: true,
+                  message: '用户名是必填项！',
+                },
+              ]}
+            />
+            <ProFormText.Password
+              name="password"
+              fieldProps={{
+                size: 'large',
+                prefix: <LockOutlined className={styles.prefixIcon} />,
+              }}
+              placeholder={'密码: ant.design'}
+              rules={[
+                {
+                  required: true,
+                  message: '密码是必填项！',
+                },
+              ]}
+            />
+          </>
 
           <div
             style={{
@@ -136,13 +132,6 @@ const Login: React.FC = () => {
             <ProFormCheckbox noStyle name="autoLogin">
               自动登录
             </ProFormCheckbox>
-            <a
-              style={{
-                float: 'right',
-              }}
-            >
-              忘记密码 ?
-            </a>
           </div>
         </LoginForm>
       </div>
