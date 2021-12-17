@@ -1,7 +1,9 @@
 type Result<T> = {
-  c: string;
-  m: string;
-  d?: T;
+  data: T;
+  success: boolean;
+  showType?: number;
+  errorCode?: string;
+  error?: string;
 };
 
 declare namespace API {

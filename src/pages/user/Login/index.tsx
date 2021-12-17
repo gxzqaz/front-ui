@@ -1,10 +1,4 @@
-import {
-  AlipayCircleOutlined,
-  LockOutlined,
-  TaobaoCircleOutlined,
-  UserOutlined,
-  WeiboCircleOutlined,
-} from '@ant-design/icons';
+import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Alert, message, Tabs } from 'antd';
 import React, { useState } from 'react';
 import { ProFormCheckbox, ProFormText, LoginForm } from '@ant-design/pro-form';
@@ -41,9 +35,9 @@ const Login: React.FC = () => {
   const handleSubmit = async (values: API.LoginParams) => {
     try {
       // 登录
-      const result = await login({ ...values });
+      const { data } = await login({ ...values });
 
-      if (result.c === '0') {
+      if (data && data.username) {
         const defaultLoginSuccessMessage = '登录成功！';
         message.success(defaultLoginSuccessMessage);
         await fetchUserInfo();
@@ -58,8 +52,8 @@ const Login: React.FC = () => {
         return;
       }
 
-      console.log(result); // 如果失败去设置用户错误信息
-      setUserLoginState(result.d || {});
+      console.log(data); // 如果失败去设置用户错误信息
+      setUserLoginState(data || {});
     } catch (error) {
       const defaultLoginFailureMessage = '登录失败，请重试！';
       message.error(defaultLoginFailureMessage);
@@ -72,26 +66,20 @@ const Login: React.FC = () => {
       <div className={styles.content}>
         <LoginForm
           logo={<img alt="logo" src="/logo.svg" />}
-          title="Ant Design"
-          subTitle={'Ant Design 是西湖区最具影响力的 Web 设计规范'}
+          title="Hermes"
+          subTitle={'中间件管理'}
           initialValues={{
             autoLogin: true,
           }}
-          actions={[
-            '其他登录方式 :',
-            <AlipayCircleOutlined key="AlipayCircleOutlined" className={styles.icon} />,
-            <TaobaoCircleOutlined key="TaobaoCircleOutlined" className={styles.icon} />,
-            <WeiboCircleOutlined key="WeiboCircleOutlined" className={styles.icon} />,
-          ]}
           onFinish={async (values) => {
             await handleSubmit(values as API.LoginParams);
           }}
         >
           <Tabs>
-            <Tabs.TabPane key="account" tab={'账户密码登录'} />
+            <Tabs.TabPane key="account" tab={'LDAP登录'} />
           </Tabs>
 
-          {username === null && <LoginMessage content={'错误的用户名和密码(admin/ant.design)'} />}
+          {username === null && <LoginMessage content={'错误的用户名和密码'} />}
 
           <>
             <ProFormText
@@ -100,7 +88,7 @@ const Login: React.FC = () => {
                 size: 'large',
                 prefix: <UserOutlined className={styles.prefixIcon} />,
               }}
-              placeholder={'用户名: admin or user'}
+              placeholder={'用户名'}
               rules={[
                 {
                   required: true,
@@ -114,7 +102,7 @@ const Login: React.FC = () => {
                 size: 'large',
                 prefix: <LockOutlined className={styles.prefixIcon} />,
               }}
-              placeholder={'密码: ant.design'}
+              placeholder={'密码'}
               rules={[
                 {
                   required: true,
